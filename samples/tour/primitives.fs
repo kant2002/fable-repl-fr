@@ -1,64 +1,64 @@
-module Tour.Primitives
+module VisiteGuidée.Primitives
 
-// From https://docs.microsoft.com/en-us/dotnet/fsharp/tour
-// Visit the link above for more information on each topic
-// You can also find more learning resources at https://fsharp.org/
+// Extrait de https://docs.microsoft.com/en-us/dotnet/fsharp/tour
+// Consultez le lien ci-dessus pour obtenir plus d'informations sur chaque sujet.
+// Vous trouverez également d'autres ressources d'apprentissage sur https://fsharp.org/
 
-module IntegersAndNumbers =
+module EntiersEtNombres =
 
-    /// This is a sample integer.
-    let sampleInteger = 176
+    /// Ceci est un entier d'exemple.
+    let unEntierDExemple = 176
 
-    /// This is a sample floating point number.
-    let sampleDouble = 4.1
+    /// Ceci est un nombre à virgule flottante d'exemple.
+    let unNombreAVirguleFlottanteDExemple = 4.1
 
-    /// This computed a new number by some arithmetic.  Numeric types are converted using
-    /// functions 'int', 'double' and so on.
-    let sampleInteger2 = (sampleInteger/4 + 5 - 7) * 4 + int sampleDouble
+    /// Ceci calcule un nouveau nombre par une arithmétique. Les types numériques sont convertis
+    /// en utilisant les fonctions 'int', 'double' et ainsi de suite.
+    let unEntierDExemple2 = (unEntierDExemple/4 + 5 - 7) * 4 + int unNombreAVirguleFlottanteDExemple
 
-    /// This is a list of the numbers from 0 to 99.
-    let sampleNumbers = [ 0 .. 99 ]
+    /// Ceci est une liste des nombres de 0 à 99.
+    let numérosDÉchantillon = [ 0 .. 99 ]
 
-    /// This is a list of all tuples containing all the numbers from 0 to 99 and their squares.
-    let sampleTableOfSquares = [ for i in 0 .. 99 -> (i, i*i) ]
+    /// Ceci est une liste de tous les tuples contenant tous les nombres de 0 à 99 et leurs carrés.
+    let exempleDeTableDesCarrés = [ for i in 0 .. 99 -> (i, i*i) ]
 
-    // The next line prints a list that includes tuples, using '%A' for generic printing.
-    printfn $"The table of squares from 0 to 99 is:\n{sampleTableOfSquares}"
-
-
-module Booleans =
-
-    /// Booleans values are 'true' and 'false'.
-    let boolean1 = true
-    let boolean2 = false
-
-    /// Operators on booleans are 'not', '&&' and '||'.
-    let boolean3 = not boolean1 && (boolean2 || false)
-
-    // This line uses '%b'to print a boolean value.  This is type-safe.
-    printfn $"The expression 'not boolean1 && (boolean2 || false)' is %b{boolean3}"
+    // La ligne suivante affiche une liste qui comprend des tuples, en utilisant '%A' pour l'impression générique.
+    printfn $"La table des carrés de 0 à 99 est:\n{exempleDeTableDesCarrés}"
 
 
-module StringManipulation =
+module Booléens =
 
-    /// Strings use double quotes.
-    let string1 = "Hello"
-    let string2  = "world"
+    /// Les valeurs booléennes sont 'true' et 'false'.
+    let booléen1 = true
+    let booléen2 = false
 
-    /// Strings can also use @ to create a verbatim string literal.
-    /// This will ignore escape characters such as '\', '\n', '\t', etc.
-    let string3 = @"C:\Program Files\"
+    /// Opérateurs sur les booléens sont 'not', '&&' et '||'.
+    let booléen3 = not booléen1 && (booléen2 || false)
 
-    /// String literals can also use triple-quotes.
-    let string4 = """The computer said "hello world" when I told it to!"""
+    // Cette ligne utilise '%b' pour afficher une valeur booléenne. Cela est type-safe.
+    printfn $"L'expression 'not booléen1 && (booléen2 || false)' est %b{booléen3}"
 
-    /// String concatenation is normally done with the '+' operator.
-    let helloWorld = string1 + " " + string2
 
-    // This line uses '%s' to print a string value.  This is type-safe.
-    printfn "%s" helloWorld
+module ManipulationDeChaînes =
 
-    /// Substrings use the indexer notation.  This line extracts the first 7 characters as a substring.
-    /// Note that like many languages, Strings are zero-indexed in F#.
-    let substring = helloWorld.[0..6]
-    printfn "%s" substring
+    /// Les chaînes utilisent des guillemets doubles.
+    let chaîne1 = "Bonjour"
+    let chaîne2  = "le monde"
+
+    /// Les chaînes peuvent également utiliser @ pour créer un littéral de chaîne verbeux.
+    /// Cela ignore les caractères d'échappement tels que '\', '\n', '\t', etc.
+    let chaîne3 = @"C:\Program Files\"
+
+    /// Les littéraux de chaîne peuvent également utiliser des guillemets triples.
+    let chaîne4 = """L'ordinateur a dit "Bonjour le monde" quand je le lui ai demandé !"""
+
+    /// La concaténation de chaînes de caractères se fait généralement avec l'opérateur '+'.
+    let bonjourLeMonde = chaîne1 + " " + chaîne2
+
+    // Cette ligne utilise '%s' pour afficher une valeur de chaîne. Cela est type-safe.
+    printfn "%s" bonjourLeMonde
+
+    /// Les sous-chaînes utilisent la notation d'index. Cette ligne extrait les 7 premiers caractères comme une sous-chaîne.
+    /// Notez que comme de nombreux langages, les chaînes sont indexées à partir de zéro en F#.
+    let souschaîne = bonjourLeMonde.[0..6]
+    printfn "%s" souschaîne
