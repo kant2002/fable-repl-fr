@@ -1,31 +1,31 @@
-module Tour.UnitsOfMeasure
+module Visite.UnitésDeMesure
 
-// From https://docs.microsoft.com/en-us/dotnet/fsharp/tour
-// Visit the link above for more information on each topic
-// You can also find more learning resources at https://fsharp.org/
+// Extrait de https://docs.microsoft.com/en-us/dotnet/fsharp/tour
+// Consultez le lien ci-dessus pour obtenir plus d'informations sur chaque sujet.
+// Vous trouverez également d'autres ressources d'apprentissage sur https://fsharp.org/
 
-// Units of measure are a way to annotate primitive numeric types in a type-safe way.
-// You can then perform type-safe arithmetic on these values.
+// Les unités de mesure sont un moyen d'annoter les types numériques primitifs de manière sécurisée.
+// Vous pouvez ensuite effectuer des opérations arithmétiques sur ces valeurs de manière sécurisée.
 //
-// To learn more, see: https://docs.microsoft.com/dotnet/fsharp/language-reference/units-of-measure
+// Pour en savoir plus, consultez : https://docs.microsoft.com/dotnet/fsharp/language-reference/units-of-measure
 
-// First, open a collection of common unit names
+// Tout d'abord, ouvrez une liste de noms de mesures courants
 open Microsoft.FSharp.Data.UnitSystems.SI.UnitNames
 
-/// Define a unitized constant
-let sampleValue1 = 1600.0<meter>
+/// Définissez une constante unifiée
+let valeurD'exemple1 = 1600.0<metre>
 
-/// Next, define a new unit type
+/// Ensuite, définissez un nouveau type d'unité
 [<Measure>]
-type mile =
-    /// Conversion factor mile to meter.
-    static member asMeter = 1609.34<meter/mile>
+type mille =
+    /// Facteur de conversion miles en mètres
+    static member enMetrès = 1609.34<metre/mille>
 
-/// Define a unitized constant
-let sampleValue2 = 500.0<mile>
+/// Définir une constante unifiée
+let valeurD'exemple2 = 500.0<mille>
 
-/// Compute  metric-system constant
-let sampleValue3 = sampleValue2 * mile.asMeter
+/// Calculer la constante du système métrique
+let valeurD'exemple3 = valeurD'exemple2 * mille.enMetrès
 
-// Values using Units of Measure can be used just like the primitive numeric type for things like printing.
-printfn "After a %f race I would walk %f miles which would be %f meters" sampleValue1 sampleValue2 sampleValue3
+// Les valeurs utilisant les unités de mesure peuvent être utilisées comme le type numérique primitif pour des choses comme l'impression.
+printfn "Après une course de %f, je marcherais %f miles, ce qui équivaudrait à %f mètres" valeurD'exemple1 valeurD'exemple2 valeurD'exemple3
