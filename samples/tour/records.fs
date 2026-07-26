@@ -1,81 +1,78 @@
-module Tour.TuplesAndRecords
+module Visite.TuplesEtEnregistrements
 
-// From https://docs.microsoft.com/en-us/dotnet/fsharp/tour
-// Visit the link above for more information on each topic
-// You can also find more learning resources at https://fsharp.org/
+// Extrait de https://docs.microsoft.com/en-us/dotnet/fsharp/tour
+// Consultez le lien ci-dessus pour obtenir plus d'informations sur chaque sujet.
+// Vous trouverez également d'autres ressources d'apprentissage sur https://fsharp.org/
 
 module Tuples =
 
-    /// A simple tuple of integers.
+    /// Un tuple simple d'entiers.
     let tuple1 = (1, 2, 3)
 
-    /// A function that swaps the order of two values in a tuple.
+    /// Une fonction qui inverse l'ordre de deux valeurs dans un tuple.
     ///
-    /// F# Type Inference will automatically generalize the function to have a generic type,
-    /// meaning that it will work with any type.
-    let swapElems (a, b) = (b, a)
+    /// La déduction de type F# généralisera automatiquement la fonction pour qu'elle ait un type générique,
+    /// ce qui signifie qu'elle fonctionnera avec n'importe quel type.
+    let échangerLesÉléments (a, b) = (b, a)
 
-    printfn "The result of swapping (1, 2) is %A" (swapElems (1,2))
+    printfn "Le résultat de l'échange (1, 2) est %A" (échangerLesÉléments (1,2))
 
-    /// A tuple consisting of an integer, a string,
-    /// and a double-precision floating point number.
+    /// Un tuple comprenant un entier, une chaîne de caractères
+    /// et un nombre à virgule flottante de précision double.
     let tuple2 = (1, "fred", 3.1415)
 
     printfn "tuple1: %A\ttuple2: %A" tuple1 tuple2
 
 
-module RecordTypes =
+module TypesEnregistrements =
 
-    /// This example shows how to define a new record type.
-    type ContactCard =
-        { Name     : string
+    /// Cet exemple montre comment définir un nouveau type d'enregistrement.
+    type CarteDeContact =
+        { Nom     : string
           Phone    : string
-          Verified : bool }
+          Vérifié : bool }
 
-    /// This example shows how to instantiate a record type.
+    /// Cet exemple montre comment instancier un type d'enregistrement.
     let contact1 =
-        { Name = "Alf"
+        { Nom = "Alf"
           Phone = "(206) 555-0157"
-          Verified = false }
+          Vérifié = false }
 
-    /// You can also do this on the same line with ';' separators.
-    let contactOnSameLine = { Name = "Alf"; Phone = "(206) 555-0157"; Verified = false }
+    /// Vous pouvez également le faire en une seule ligne avec des séparateurs ';'.
+    let contactSurLaMêmeLigne = { Nom = "Alf"; Phone = "(206) 555-0157"; Vérifié = false }
 
-    /// This example shows how to use "copy-and-update" on record values. It creates
-    /// a new record value that is a copy of contact1, but has different values for
-    /// the 'Phone' and 'Verified' fields.
+    /// Cet exemple montre comment utiliser l'"opération copie et mise à jour" sur les valeurs d'enregistrement. Il crée une nouvelle valeur
+    /// d'enregistrement qui est une copie de contact1, mais avec des valeurs différentes pour les champs "Téléphone" et "Vérifié".
     ///
-    /// To learn more, see: https://docs.microsoft.com/dotnet/fsharp/language-reference/copy-and-update-record-expressions
+    /// Pour en savoir plus, consultez : https://docs.microsoft.com/dotnet/fsharp/language-reference/copy-and-update-record-expressions
     let contact2 =
         { contact1 with
             Phone = "(206) 555-0112"
-            Verified = true }
+            Vérifié = true }
 
-    /// This example shows how to write a function that processes a record value.
-    /// It converts a 'ContactCard' object to a string.
-    let showContactCard (c: ContactCard) =
-        c.Name + " Phone: " + c.Phone + (if not c.Verified then " (unverified)" else "")
+    /// Cet exemple montre comment écrire une fonction qui traite une valeur d'enregistrement.
+    /// Il convertit un objet "ContactCard" en chaîne de caractères.
+    let afficherLaCarteDeContact (c: CarteDeContact) =
+        c.Nom + " Phone: " + c.Phone + (if not c.Vérifié then " (non vérifié)" else "")
 
-    printfn "Alf's Contact Card: %s" (showContactCard contact1)
+    printfn "Carte de contact d'Alf: %s" (afficherLaCarteDeContact contact1)
 
-    /// This is an example of a Record with a member.
-    type ContactCardAlternate =
-        { Name     : string
+    /// Voici un exemple d'un Enregistrement avec un membre.
+    type CarteDeContactAlternate =
+        { Nom     : string
           Phone    : string
-          Address  : string
-          Verified : bool }
+          Adresse  : string
+          Vérifié : bool }
 
-        /// Members can implement object-oriented members.
-        member this.PrintedContactCard =
-            this.Name + " Phone: " + this.Phone + (if not this.Verified then " (unverified)" else "") + this.Address
+        /// Les membres peuvent implémenter des membres orientés objet.
+        member this.CarteDeContactImprimeé =
+            this.Nom + " Phone: " + this.Phone + (if not this.Vérifié then " (non vérifié)" else "") + this.Adresse
 
     let contactAlternate =
-        { Name = "Alf"
+        { Nom = "Alf"
           Phone = "(206) 555-0157"
-          Verified = false
-          Address = "111 Alf Street" }
+          Vérifié = false
+          Adresse = "111 Alf Street" }
 
-    // Members are accessed via the '.' operator on an instantiated type.
-    printfn "Alf's alternate contact card is %s" contactAlternate.PrintedContactCard
-
-
+    // Les membres sont accessibles via l'opérateur "." sur un type instancié.
+    printfn "La carte de contact alternative d'Alf est %s" contactAlternate.CarteDeContactImprimeé
