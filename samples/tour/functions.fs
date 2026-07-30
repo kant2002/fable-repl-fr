@@ -1,163 +1,167 @@
-module Tour.Functions
+module Tour.Fonctions
 
-// From https://docs.microsoft.com/en-us/dotnet/fsharp/tour
-// Visit the link above for more information on each topic
-// You can also find more learning resources at https://fsharp.org/
+// Extrait de https://docs.microsoft.com/en-us/dotnet/fsharp/tour
+// Consultez le lien ci-dessus pour obtenir plus d'informations sur chaque sujet.
+// Vous trouverez également d'autres ressources d'apprentissage sur https://fsharp.org/
 
-module BasicFunctions =
+module FonctionsDeBase =
 
-    /// You use 'let' to define a function. This one accepts an integer argument and returns an integer.
-    /// Parentheses are optional for function arguments, except for when you use an explicit type annotation.
-    let sampleFunction1 x = x*x + 3
+    /// Vous utilisez "laisser" pour définir une fonction. Celle-ci accepte un argument entier et renvoie un entier.
+    /// Les parenthèses sont facultatives pour les arguments de fonction, sauf lorsque vous utilisez une annotation de type explicite.
+    let fonctionD'Example1 x = x*x + 3
 
-    /// Apply the function, naming the function return result using 'let'.
-    /// The variable type is inferred from the function return type.
-    let result1 = sampleFunction1 4573
+    /// Appliquez la fonction, en nommant le résultat avec "laisser".
+    /// Le type de la variable est déduit du type de retour de la fonction.
+    let résultat1 = fonctionD'Example1 4573
 
-    // This line uses '%d' to print the result as an integer. This is type-safe.
-    // If 'result1' were not of type 'int', then the line would fail to compile.
-    printfn "The result of squaring the integer 4573 and adding 3 is %d" result1
+    // Cette ligne utilise '%d' pour afficher le résultat en tant qu'entier. Ceci est sécurisé.
+    // Si 'résultat1' n'était pas de type 'int', alors la ligne échouerait à la compilation.
+    printfn "Résultat de l'élévation au carré de l'entier 4573 et de l'ajout de 3 est %d" résultat1
 
-    /// When needed, annotate the type of a parameter name using '(argument:type)'.  Parentheses are required.
-    let sampleFunction2 (x:int) = 2*x*x - x/5 + 3
+    /// Lorsque nécessaire, annotez le type d'un nom de paramètre en utilisant `(argument:type)`. Les parenthèses sont obligatoires.
+    let fonctionD'Example2 (x:int) = 2*x*x - x/5 + 3
 
-    let result2 = sampleFunction2 (7 + 4)
-    printfn "The result of applying the 2nd sample function to (7 + 4) is %d" result2
+    let résultat2 = fonctionD'Example2 (7 + 4)
+    printfn "Le résultat de l'application de la 2ème fonction d'exemple à (7 + 4) est : %d" résultat2
 
-    /// Conditionals use if/then/elif/else.
+    /// Les conditions utilisent if/then/elif/else.
     ///
-    /// Note that F# uses white space indentation-aware syntax, similar to languages like Python.
-    let sampleFunction3 x =
+    /// Remarque : F# utilise une syntaxe basée sur l'indentation de l'espace blanc, similaire aux langages comme Python.
+    let fonctionD'Example3 x =
         if x < 100.0 then
             2.0*x*x - x/5.0 + 3.0
         else
             2.0*x*x + x/5.0 - 37.0
 
-    let result3 = sampleFunction3 (6.5 + 4.5)
+    let résultat3 = fonctionD'Example3 (6.5 + 4.5)
 
-    // This line uses '%f' to print the result as a float.  As with '%d' above, this is type-safe.
-    printfn "The result of applying the 3rd sample function to (6.5 + 4.5) is %f" result3
+    // Cette ligne utilise `%f` pour afficher le résultat en tant que nombre à virgule flottante. Comme pour `%d` ci-dessus, ceci est sécurisé.
+    printfn "Le résultat de l'application de la 3ème fonction d'exemple à (6,5 + 4,5) est %f" résultat3
 
 
-module Immutability =
+module Immuabilité =
 
-    /// Binding a value to a name via 'let' makes it immutable.
-    ///
-    /// The second line of code fails to compile because 'number' is immutable and bound.
-    /// Re-defining 'number' to be a different value is not allowed in F#.
-    let number = 2
-    // let number = 3
+    /// Lier une valeur à un nom via "laisser" la rend immuable.
+    /// 
+    /// La deuxième ligne de code ne se compile pas car "nombre" est immuable et lié.
+    /// Il n'est pas possible de redéfinir "nombre" pour qu'il ait une autre valeur dans F#.
+    let nombre = 2
+    // let nombre = 3
 
-    /// A mutable binding.  This is required to be able to mutate the value of 'otherNumber'.
-    let mutable otherNumber = 2
+    /// Une liaison mutable. Ceci est nécessaire pour pouvoir modifier la valeur de "autreNombre".
+    let mutable autreNombre = 2
 
-    printfn "'otherNumber' is %d" otherNumber
+    printfn "'autreNombre' est %d" autreNombre
 
-    // When mutating a value, use '<-' to assign a new value.
+    // Lorsque vous modifiez une valeur, utilisez "<-" pour attribuer une nouvelle valeur.
     //
-    // Note that '=' is not the same as '<-'.  '=' is used to test equality.
-    otherNumber <- otherNumber + 1
+    // Remarque : "=" n'est pas le même que "<-". "=" est utilisé pour tester l'égalité.
+    autreNombre <- autreNombre + 1
 
-    printfn "'otherNumber' changed to be %d" otherNumber
+    printfn "'autreNombre' a été modifié pour être %d" autreNombre
 
 
-module PipelinesAndComposition =
+module PipelinesEtComposition =
 
-    /// Squares a value.
-    let square x = x * x
+    /// Élève un nombre au carré
+    let carré x = x * x
 
-    /// Adds 1 to a value.
-    let addOne x = x + 1
+    /// Ajoute 1 à une valeur
+    let ajouteUn x = x + 1
 
-    /// Tests if an integer value is odd via modulo.
-    let isOdd x = x % 2 <> 0
+    /// Vérifie si une valeur entière est impaire en utilisant le modulo.
+    let estImpair x = x % 2 <> 0
 
-    /// A list of 5 numbers.  More on lists later.
-    let numbers = [ 1; 2; 3; 4; 5 ]
+    /// Une liste de 5 nombres. Plus d'informations sur les listes plus tard.
+    let nombres = [ 1; 2; 3; 4; 5 ]
 
-    /// Given a list of integers, it filters out the even numbers,
-    /// squares the resulting odds, and adds 1 to the squared odds.
-    let squareOddValuesAndAddOne values =
-        let odds = List.filter isOdd values
-        let squares = List.map square odds
-        let result = List.map addOne squares
-        result
+    /// Étant donné une liste d'entiers, elle filtre les nombres pairs,
+    /// élève au carré les impairs résultants et ajoute 1 aux impairs carrés.
+    let éleverAuCarréLesValeursImpairesEtAjouterUn valeurs =
+        let impairs = List.filter estImpair valeurs
+        let carrés = List.map carré odds
+        let résultat = List.map ajouteUn carrés
+        résultat
 
-    printfn "processing %A through 'squareOddValuesAndAddOne' produces: %A" numbers (squareOddValuesAndAddOne numbers)
+    printfn "Le traitement de %A via 'éleverAuCarréLesValeursImpairesEtAjouterUn' produit: %A"
+        nombres (éleverAuCarréLesValeursImpairesEtAjouterUn nombres)
 
-    /// A shorter way to write 'squareOddValuesAndAddOne' is to nest each
-    /// sub-result into the function calls themselves.
+    /// Une manière plus courte d'écrire "éleverAuCarréLesValeursImpairesEtAjouterUn" 
+    /// consiste à imbriquer chaque résultat dans les appels de fonction eux-mêmes.
     ///
-    /// This makes the function much shorter, but it's difficult to see the
-    /// order in which the data is processed.
-    let squareOddValuesAndAddOneNested values =
-        List.map addOne (List.map square (List.filter isOdd values))
+    /// Cela rend la fonction beaucoup plus courte, mais il est difficile de voir l'ordre
+    /// dans lequel les données sont traitées.
+    let éleverAuCarréLesValeursImpairesEtAjouterUnImbriqué valeurs =
+        List.map ajouteUn (List.map carré (List.filter estImpair valeurs))
 
-    printfn "processing %A through 'squareOddValuesAndAddOneNested' produces: %A" numbers (squareOddValuesAndAddOneNested numbers)
+    printfn "Le traitement %A via 'éleverAuCarréLesValeursImpairesEtAjouterUnImbriqué' produit: %A"
+        nombres (éleverAuCarréLesValeursImpairesEtAjouterUnImbriqué nombres)
 
-    /// A preferred way to write 'squareOddValuesAndAddOne' is to use F# pipe operators.
-    /// This allows you to avoid creating intermediate results, but is much more readable
-    /// than nesting function calls like 'squareOddValuesAndAddOneNested'
-    let squareOddValuesAndAddOnePipeline values =
-        values
-        |> List.filter isOdd
-        |> List.map square
-        |> List.map addOne
+    /// Une manière préférée d'écrire "éleverAuCarréLesValeursImpairesEtAjouterUn" 
+    /// consiste à utiliser les opérateurs de canalisation F#.
+    /// Cela vous permet d'éviter de créer des résultats intermédiaires, 
+    /// mais c'est beaucoup plus lisible que le fait d'imbriquer des appels 
+    /// de fonction comme "éleverAuCarréLesValeursImpairesEtAjouterUnImbriqué".
+    let éleverAuCarréLesValeursImpairesEtAjouterPipeline valeurs =
+        valeurs
+        |> List.filter estImpair
+        |> List.map carré
+        |> List.map ajouteUn
 
-    printfn "processing %A through 'squareOddValuesAndAddOnePipeline' produces: %A" numbers (squareOddValuesAndAddOnePipeline numbers)
+    printfn "Le traitement %A via 'éleverAuCarréLesValeursImpairesEtAjouterPipeline' produit: %A"
+        nombres (éleverAuCarréLesValeursImpairesEtAjouterPipeline nombres)
 
-    /// You can shorten 'squareOddValuesAndAddOnePipeline' by moving the second `List.map` call
-    /// into the first, using a Lambda Function.
+    /// Vous pouvez raccourcir "éleverAuCarréLesValeursImpairesEtAjouterPipeline" 
+    /// en déplaçant la deuxième invocation de `List.map` dans la première, à l'aide d'une fonction lambda.
     ///
-    /// Note that pipelines are also being used inside the lambda function.  F# pipe operators
-    /// can be used for single values as well.  This makes them very powerful for processing data.
-    let squareOddValuesAndAddOneShorterPipeline values =
-        values
-        |> List.filter isOdd
-        |> List.map(fun x -> x |> square |> addOne)
+    /// Remarque : les pipelines sont également utilisés à l'intérieur de la fonction lambda. Les opérateurs de canalisation F# peuvent être
+    /// utilisés pour des valeurs uniques. Cela les rend très puissants pour le traitement des données.
+    let squareOddValuesAndAddOneShorterPipeline valeurs =
+        valeurs
+        |> List.filter estImpair
+        |> List.map(fun x -> x |> carré |> ajouteUn)
 
-    printfn "processing %A through 'squareOddValuesAndAddOneShorterPipeline' produces: %A" numbers (squareOddValuesAndAddOneShorterPipeline numbers)
+    printfn "Le traitment %A via 'squareOddValuesAndAddOneShorterPipeline' produit: %A"
+        nombres (squareOddValuesAndAddOneShorterPipeline nombres)
 
 
-module RecursiveFunctions =
+module FonctionsRécursives =
 
-    /// This example shows a recursive function that computes the factorial of an
-    /// integer. It uses 'let rec' to define a recursive function.
-    let rec factorial n =
-        if n = 0 then 1 else n * factorial (n-1)
+    /// Cet exemple montre une fonction récursive qui calcule la factorielle d'un
+    /// entier. Elle utilise "let rec" pour définir une fonction récursive.
+    let rec factorielle n =
+        if n = 0 then 1 else n * factorielle (n-1)
 
-    printfn "Factorial of 6 is: %d" (factorial 6)
+    printfn "La factorielle de 6 est: %d" (factorielle 6)
 
-    /// Computes the greatest common factor of two integers.
+    /// Calcule le plus grand commun diviseur de deux entiers.
     ///
-    /// Since all of the recursive calls are tail calls,
-    /// the compiler will turn the function into a loop,
-    /// which improves performance and reduces memory consumption.
-    let rec greatestCommonFactor a b =
+    /// Puisque toutes les appels récursifs sont des appels de queue,
+    /// le compilateur transformera la fonction en boucle,
+    /// ce qui améliore les performances et réduit la consommation de mémoire.
+    let rec grandCommunDiviseur a b =
         if a = 0 then b
-        elif a < b then greatestCommonFactor a (b - a)
-        else greatestCommonFactor (a - b) b
+        elif a < b then grandCommunDiviseur a (b - a)
+        else grandCommunDiviseur (a - b) b
 
-    printfn "The Greatest Common Factor of 300 and 620 is %d" (greatestCommonFactor 300 620)
+    printfn "Le plus grand commun diviseur de 300 et 620 est %d" (grandCommunDiviseur 300 620)
 
-    /// This example computes the sum of a list of integers using recursion.
-    let rec sumList xs =
+    /// Cet exemple calcule la somme d'une liste d'entiers en utilisant la récursion.
+    let rec sommeDeLaList xs =
         match xs with
         | []    -> 0
-        | y::ys -> y + sumList ys
+        | y::ys -> y + sommeDeLaList ys
 
-    /// This makes 'sumList' tail recursive, using a helper function with a result accumulator.
-    let rec private sumListTailRecHelper accumulator xs =
+    /// Cela rend "sommeDeLaList" récursif de manière de queue, en utilisant une fonction auxiliaire avec un accumulateur de résultat.
+    let rec private sommeDeLaListRécAux accumulator xs =
         match xs with
         | []    -> accumulator
-        | y::ys -> sumListTailRecHelper (accumulator+y) ys
+        | y::ys -> sommeDeLaListRécAux (accumulator+y) ys
 
-    /// This invokes the tail recursive helper function, providing '0' as a seed accumulator.
-    /// An approach like this is common in F#.
-    let sumListTailRecursive xs = sumListTailRecHelper 0 xs
+    /// Cela invoque la fonction auxiliaire récursive de queue, en fournissant "0" comme accumulateur initial.
+    /// Une approche comme celle-ci est courante en F#.
+    let sommeDeLaListRéc xs = sommeDeLaListRécAux 0 xs
 
-    let oneThroughTen = [1; 2; 3; 4; 5; 6; 7; 8; 9; 10]
+    let deUnÀDix = [1; 2; 3; 4; 5; 6; 7; 8; 9; 10]
 
-    printfn "The sum 1-10 is %d" (sumListTailRecursive oneThroughTen)
-
-
+    printfn "Somme de 1 à 10 est %d" (sommeDeLaListRéc deUnÀDix)
