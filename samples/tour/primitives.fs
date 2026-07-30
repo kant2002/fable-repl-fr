@@ -1,4 +1,4 @@
-module VisiteGuidée.Primitives
+module Visite.Primitives
 
 // Extrait de https://docs.microsoft.com/en-us/dotnet/fsharp/tour
 // Consultez le lien ci-dessus pour obtenir plus d'informations sur chaque sujet.
