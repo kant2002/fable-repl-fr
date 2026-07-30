@@ -1,231 +1,230 @@
-module Tour.Unions
+module Visite.Unions
 
-// From https://docs.microsoft.com/en-us/dotnet/fsharp/tour
-// Visit the link above for more information on each topic
-// You can also find more learning resources at https://fsharp.org/
+// Extrait de https://docs.microsoft.com/en-us/dotnet/fsharp/tour
+// Consultez le lien ci-dessus pour obtenir plus d'informations sur chaque sujet.
+// Vous trouverez également d'autres ressources d'apprentissage sur https://fsharp.org/
 
-module DiscriminatedUnions =
+module UnionsDiscriminées =
 
-    /// The following represents the suit of a playing card.
+    /// Ce qui suit représente la couleur d'une carte à jouer.
     type Suit =
-        | Hearts
-        | Clubs
-        | Diamonds
-        | Spades
+        | Trèfles
+        | Carreaux
+        | Piques
+        | Cœurs
 
-    /// A Discriminated Union can also be used to represent the rank of a playing card.
-    type Rank =
-        /// Represents the rank of cards 2 .. 10
-        | Value of int
-        | Ace
-        | King
-        | Queen
-        | Jack
+    /// Une Union discriminée peut également être utilisée pour représenter la valeur d'une carte à jouer.
+    type Rang =
+        /// Représente la valeur des cartes de 2 à 10.
+        | Valeur of int
+        | As
+        | Roi
+        | Dame
+        | Valet
 
-        /// Discriminated Unions can also implement object-oriented members.
-        static member GetAllRanks() =
-            [ yield Ace
-              for i in 2 .. 10 do yield Value i
-              yield Jack
-              yield Queen
-              yield King ]
+        /// Les unions discriminées peuvent également implémenter des membres orientés objet.
+        static member ObtenirTousLesRangs() =
+            [ yield As
+              for i in 2 .. 10 do yield Valeur i
+              yield Valet
+              yield Dame
+              yield Roi ]
 
-    /// This is a record type that combines a Suit and a Rank.
-    /// It's common to use both Records and Discriminated Unions when representing data.
-    type Card = { Suit: Suit; Rank: Rank }
+    /// Il s'agit d'un type enregistrement qui combine une couleur et une valeur. 
+    /// Il est courant d'utiliser à la fois des enregistrements et des unions discriminées pour représenter des données.
+    type Carte = { Suit: Suit; Rang: Rang }
 
-    /// This computes a list representing all the cards in the deck.
-    let fullDeck =
-        [ for suit in [ Hearts; Diamonds; Clubs; Spades] do
-              for rank in Rank.GetAllRanks() do
-                  yield { Suit=suit; Rank=rank } ]
+    /// Cela calcule une liste représentant toutes les cartes du jeu.
+    let deckComplet =
+        [ for suit in [ Cœurs; Carreaux; Piques; Trèfles] do
+              for rang in Rang.ObtenirTousLesRangs() do
+                  yield { Suit=suit; Rang=rang } ]
 
-    /// This example converts a 'Card' object to a string.
-    let showPlayingCard (c: Card) =
-        let rankString =
-            match c.Rank with
-            | Ace -> "Ace"
-            | King -> "King"
-            | Queen -> "Queen"
-            | Jack -> "Jack"
-            | Value n -> string n
-        let suitString =
+    /// Cet exemple convertit un objet `Card` en chaîne de caractères.
+    let afficherCarteÀJouer (c: Carte) =
+        let chaîneDeRang =
+            match c.Rang with
+            | As -> "As"
+            | Roi -> "Roi"
+            | Dame -> "Dame"
+            | Valet -> "Valet"
+            | Valeur n -> string n
+        let chaîneDeSuit =
             match c.Suit with
-            | Clubs -> "clubs"
-            | Diamonds -> "diamonds"
-            | Spades -> "spades"
-            | Hearts -> "hearts"
-        rankString  + " of " + suitString
+            | Trèfles -> "trèfles"
+            | Carreaux -> "carreaux"
+            | Piques -> "piques"
+            | Cœurs -> "cœurs"
+        chaîneDeRang  + " de " + chaîneDeSuit
 
-    /// This example prints all the cards in a playing deck.
-    let printAllCards() =
-        for card in fullDeck do
-            printfn "%s" (showPlayingCard card)
+    /// Cet exemple affiche toutes les cartes d'un jeu de cartes.
+    let afficherToutesLesCartes() =
+        for carte in deckComplet do
+            printfn "%s" (afficherCarteÀJouer carte)
 
 
-    // Single-case DUs are often used for domain modeling.  This can buy you extra type safety
-    // over primitive types such as strings and ints.
+    // Les types union discriminée (DU) à un seul cas sont souvent utilisés pour la modélisation de domaine. Ils offrent une sécurité de typage accrue
+    // par rapport aux types primitifs tels que les chaînes de caractères et les entiers. 
     //
-    // Single-case DUs cannot be implicitly converted to or from the type they wrap.
-    // For example, a function which takes in an Address cannot accept a string as that input,
-    // or vice versa.
+    // Les types union discriminée à un seul cas ne peuvent pas être convertis implicitement vers ou depuis le type qu'ils encapsulent. 
+    // Par exemple, une fonction attendant un paramètre de type 'Address' ne peut pas accepter une chaîne de caractères en entrée,
+    // et inversement.
     type Address = Address of string
-    type Name = Name of string
-    type SSN = SSN of int
+    type Nom = Nom of string
+    type NuméroDeSécuritéSociale = NuméroDeSécuritéSociale of int
 
-    // You can easily instantiate a single-case DU as follows.
-    let address = Address "111 Alf Way"
-    let name = Name "Alf"
-    let ssn = SSN 1234567890
+    // Vous pouvez facilement instancier une union discriminée à cas unique comme suit.
+    let adress = Address "111 Alf Way"
+    let nom = Nom "Alf"
+    let numéroDeSécuritéSociale = NuméroDeSécuritéSociale 1234567890
 
-    /// When you need the value, you can unwrap the underlying value with a simple function.
-    let unwrapAddress (Address a) = a
-    let unwrapName (Name n) = n
-    let unwrapSSN (SSN s) = s
+    /// Lorsque vous avez besoin de la valeur, vous pouvez extraire la valeur sous-jacente à l'aide d'une fonction simple.
+    let déballerAdresse (Address a) = a
+    let déballerNom (Nom n) = n
+    let déballerNuméroDeSécuritéSociale (NuméroDeSécuritéSociale s) = s
 
-    // Printing single-case DUs is simple with unwrapping functions.
-    printfn "Address: %s, Name: %s, and SSN: %d" (address |> unwrapAddress) (name |> unwrapName) (ssn |> unwrapSSN)
+    // L'impression d'unités de données (DU) à cas unique est simple grâce aux fonctions de déballage.
+    printfn "Adresse: %s, Nom: %s, et numéro de sécurité sociale: %d" (adress |> déballerAdresse) (nom |> déballerNom) (numéroDeSécuritéSociale |> déballerNuméroDeSécuritéSociale)
 
 
-    /// Discriminated Unions also support recursive definitions.
+    /// Les unions discriminées prennent également en charge les définitions récursives. 
     ///
-    /// This represents a Binary Search Tree, with one case being the Empty tree,
-    /// and the other being a Node with a value and two subtrees.
-    type BST<'T> =
-        | Empty
-        | Node of value:'T * left: BST<'T> * right: BST<'T>
+    /// Ceci représente un arbre binaire de recherche, où un cas correspond à l'arbre vide
+    /// et l'autre à un nœud contenant une valeur et deux sous-arbres.
+    type ABR<'T> =
+        | Vide
+        | Nœud of valeur:'T * gauche: ABR<'T> * droite: ABR<'T>
 
-    /// Check if an item exists in the binary search tree.
-    /// Searches recursively using Pattern Matching.  Returns true if it exists; otherwise, false.
-    let rec exists item bst =
-        match bst with
-        | Empty -> false
-        | Node (x, left, right) ->
+    /// Vérifie si un élément existe dans l'arbre de recherche binaire. 
+    /// Effectue une recherche récursive à l'aide du filtrage par motif. Renvoie true s'il existe, false sinon.
+    let rec existe item abr =
+        match abr with
+        | Vide -> false
+        | Nœud (x, gauche, droite) ->
             if item = x then true
-            elif item < x then (exists item left) // Check the left subtree.
-            else (exists item right) // Check the right subtree.
+            elif item < x then (existe item gauche) // Vérifiez le sous-arbre gauche.
+            else (existe item droite) // Vérifiez le sous-arbre droit.
 
-    /// Inserts an item in the Binary Search Tree.
-    /// Finds the place to insert recursively using Pattern Matching, then inserts a new node.
-    /// If the item is already present, it does not insert anything.
-    let rec insert item bst =
-        match bst with
-        | Empty -> Node(item, Empty, Empty)
-        | Node(x, left, right) as node ->
-            if item = x then node // No need to insert, it already exists; return the node.
-            elif item < x then Node(x, insert item left, right) // Call into left subtree.
-            else Node(x, left, insert item right) // Call into right subtree.
+    /// Insère un élément dans l'arbre de recherche binaire. 
+    /// Trouve récursivement l'emplacement d'insertion à l'aide du filtrage par motif, puis insère un nouveau nœud. 
+    /// Si l'élément est déjà présent, aucune insertion n'est effectuée.
+    let rec insérer item abr =
+        match abr with
+        | Vide -> Nœud(item, Vide, Vide)
+        | Nœud(x, gauche, droite) as nœud ->
+            if item = x then nœud // Inutile d'insérer, cela existe déjà ; renvoyez le nœud.
+            elif item < x then Nœud(x, insérer item gauche, droite) // Appel vers le sous-arbre gauche.
+            else Nœud(x, gauche, insérer item droite) // Appel vers le sous-arbre droit.
 
 
-module PatternMatching =
+module CorrespondanceDeMotifs =
     open System
 
-    /// A record for a person's first and last name
-    type Person = {
-        First : string
-        Last  : string
+    /// Un enregistrement pour le prénom et le nom de famille d'une personne
+    type Personne = {
+        Prenom : string
+        Nom : string
     }
 
-    /// A Discriminated Union of 3 different kinds of employees
-    type Employee =
-        | Engineer of engineer: Person
-        | Manager of manager: Person * reports: List<Employee>
-        | Executive of executive: Person * reports: List<Employee> * assistant: Employee
+    /// Une union différenciée de 3 catégories d'employés
+    type Employée =
+        | Ingénieur of ingénieur: Personne
+        | Directeur of directeur: Personne * rapports: List<Employée>
+        | Exécutif of exécutif: Personne * rapports: List<Employée> * assistant: Employée
 
-    /// Count everyone underneath the employee in the management hierarchy,
-    /// including the employee. The matches bind names to the properties
-    /// of the cases so that those names can be used inside the match branches.
-    /// Note that the names used for binding do not need to be the same as the
-    /// names given in the DU definition above.
-    let rec countReports(emp : Employee) =
+    /// Compte toutes les personnes situées en dessous de l'employé dans la hiérarchie de gestion,
+    /// y compris l'employé lui-même. Les correspondances associent des noms aux propriétés
+    /// des cas, permettant ainsi d'utiliser ces noms au sein des branches de correspondance. 
+    /// Notez que les noms utilisés pour cette association ne sont pas nécessairement
+    /// identiques à ceux définis dans la déclaration du type de données (DU) ci-dessus.
+    let rec compterLesRapports(emp : Employée) =
         1 + match emp with
-            | Engineer(person) ->
+            | Ingénieur(personne) ->
                 0
-            | Manager(person, reports) ->
-                reports |> List.sumBy countReports
-            | Executive(person, reports, assistant) ->
-                (reports |> List.sumBy countReports) + countReports assistant
+            | Directeur(personne, rapports) ->
+                rapports |> List.sumBy compterLesRapports
+            | Exécutif(personne, rapports, assistant) ->
+                (rapports |> List.sumBy compterLesRapports) + compterLesRapports assistant
 
 
-    /// Find all managers/executives named "Dave" who do not have any reports.
-    /// This uses the 'function' shorthand to as a lambda expression.
-    let rec findDaveWithOpenPosition(emps : List<Employee>) =
+    /// Trouve tous les managers ou cadres nommés "Dave" qui n'ont aucun subordonné. 
+    /// Ceci utilise la notation abrégée 'function' pour une expression lambda.
+    let rec trouverDaveAvecPosteOuvert(emps : List<Employée>) =
         emps
         |> List.filter(function
-                       | Manager({First = "Dave"}, []) -> true // [] matches an empty list.
-                       | Executive({First = "Dave"}, [], _) -> true
-                       | _ -> false) // '_' is a wildcard pattern that matches anything.
-                                     // This handles the "or else" case.
+                       | Directeur({Prenom = "Dave"}, []) -> true // [] correspond à une liste vide.
+                       | Exécutif({Prenom = "Dave"}, [], _) -> true
+                       | _ -> false) // '_' est un motif générique qui correspond à n'importe quoi.
+                                     // Cela gère le cas "sinon".
 
 
-    /// You can also use the shorthand function construct for pattern matching,
-    /// which is useful when you're writing functions which make use of Partial Application.
-    let private parseHelper f = f >> function
+    /// Vous pouvez également utiliser la syntaxe abrégée de définition de fonction pour le filtrage par motif,
+    /// ce qui est utile lorsque vous écrivez des fonctions faisant appel à l'application partielle.
+    let private assistantD'Analyse f = f >> function
         | (true, item) -> Some item
         | (false, _) -> None
 
-    let parseDateTimeOffset: string -> _ = parseHelper DateTimeOffset.TryParse
+    let analyserDateTimeOffset: string -> _ = assistantD'Analyse DateTimeOffset.TryParse
 
-    let result = parseDateTimeOffset "1970-01-01"
-    match result with
-    | Some dto -> printfn "It parsed!"
-    | None -> printfn "It didn't parse!"
+    let résultat = analyserDateTimeOffset "1970-01-01"
+    match résultat with
+    | Some dto -> printfn "L'analyse a réussi!"
+    | None -> printfn "L'analyse a échoué!"
 
-    // Define some more functions which parse with the helper function.
-    let parseInt: string -> _  = parseHelper Int32.TryParse
-    let parseDouble: string -> _  = parseHelper Double.TryParse
-    let parseTimeSpan: string -> _  = parseHelper TimeSpan.TryParse
+    // Définissez d'autres fonctions qui effectuent l'analyse à l'aide de la fonction auxiliaire.
+    let analyserInt: string -> _  = assistantD'Analyse Int32.TryParse
+    let analyserDouble: string -> _  = assistantD'Analyse Double.TryParse
+    let analyserTimeSpan: string -> _  = assistantD'Analyse TimeSpan.TryParse
 
 
-    // Active Patterns are another powerful construct to use with pattern matching.
-    // They allow you to partition input data into custom forms, decomposing them at the pattern match call site.
+    // Les motifs actifs constituent une autre construction puissante à utiliser avec le filtrage par motif. 
+    // Ils permettent de partitionner les données d'entrée en formes personnalisées, en les décomposant au point d'appel du filtrage. 
     //
-    // To learn more, see: https://docs.microsoft.com/dotnet/fsharp/language-reference/active-patterns
-    let (|Int|_|) = parseInt
-    let (|Double|_|) = parseDouble
-    let (|Date|_|) = parseDateTimeOffset
-    let (|TimeSpan|_|) = parseTimeSpan
+    // Pour en savoir plus, consultez : https://docs.microsoft.com/dotnet/fsharp/language-reference/active-patterns
+    let (|Int|_|) = analyserInt
+    let (|Double|_|) = analyserDouble
+    let (|Date|_|) = analyserDateTimeOffset
+    let (|TimeSpan|_|) = analyserTimeSpan
 
-    /// Pattern Matching via 'function' keyword and Active Patterns often looks like this.
-    let printParseResult = function
+    /// Le filtrage par motif utilisant le mot-clé "function" et les motifs actifs ressemble souvent à ceci.
+    let afficherLeRésultatDeL'Analyse = function
         | Int x -> printfn "%d" x
         | Double x -> printfn "%f" x
         | Date d -> printfn "%s" (d.ToString())
         | TimeSpan t -> printfn "%s" (t.ToString())
-        | _ -> printfn "Nothing was parse-able!"
+        | _ -> printfn "Rien n'était analysable !"
 
-    // Call the printer with some different values to parse.
-    printParseResult "12"
-    printParseResult "12.045"
-    printParseResult "12/28/2016"
-    printParseResult "9:01PM"
-    printParseResult "banana!"
+    // Appelez la fonction d'impression avec différentes valeurs à analyser.
+    afficherLeRésultatDeL'Analyse "12"
+    afficherLeRésultatDeL'Analyse "12.045"
+    afficherLeRésultatDeL'Analyse "12/28/2016"
+    afficherLeRésultatDeL'Analyse "9:01PM"
+    afficherLeRésultatDeL'Analyse "banana!"
 
 
-module OptionValues =
-    /// Option values are any kind of value tagged with either 'Some' or 'None'.
-    /// They are used extensively in F# code to represent the cases where many other
-    /// languages would use null references.
+module ValeursDesOptions =
+    /// Les valeurs de type Option sont des valeurs étiquetées soit par « Some », soit par « None ». 
+    /// Elles sont largement utilisées dans le code F# pour représenter les cas où de nombreux autres
+    /// langages utiliseraient des références nulles. 
     ///
-    /// To learn more, see: https://docs.microsoft.com/dotnet/fsharp/language-reference/options
+    /// Pour en savoir plus, consultez : https://docs.microsoft.com/dotnet/fsharp/language-reference/options
 
-    /// First, define a zip code defined via Single-case Discriminated Union.
-    type ZipCode = ZipCode of string
+    /// Tout d'abord, définissez un code postal à l'aide d'une union discriminée à cas unique.
+    type CodePostal = CodePostal of string
 
-    /// Next, define a type where the ZipCode is optional.
-    type Customer = { ZipCode: ZipCode option }
+    /// Ensuite, définissez un type dans lequel le code postal est facultatif.
+    type Client = { CodePostal: CodePostal option }
 
-    /// Next, define an interface type the represents an object to compute the shipping zone for the customer's zip code,
-    /// given implementations for the 'getState' and 'getShippingZone' abstract methods.
-    type IShippingCalculator =
-        abstract GetState : ZipCode -> string option
-        abstract GetShippingZone : string -> int
+    /// Ensuite, définissez un type d'interface représentant un objet chargé de calculer la zone d'expédition en fonction du code postal du client,
+    /// en fournissant des implémentations pour les méthodes abstraites « getState » et « getShippingZone ».
+    type ICalculateurD'Expédition =
+        abstract ObtenirL'État : CodePostal -> string option
+        abstract ObtenirLaZoneDExpédition : string -> int
 
-    /// Next, calculate a shipping zone for a customer using a calculator instance.
-    /// This uses combinators in the Option module to allow a functional pipeline for
-    /// transforming data with Optionals.
-    let CustomerShippingZone (calculator: IShippingCalculator, customer: Customer) =
-        customer.ZipCode
-        |> Option.bind calculator.GetState
-        |> Option.map calculator.GetShippingZone
-
+    /// Ensuite, calculez une zone d'expédition pour un client à l'aide d'une instance de calculateur. 
+    /// Cette approche utilise des combinateurs du module Option pour permettre la mise en place d'un pipeline fonctionnel
+    /// destiné à transformer des données impliquant des options.
+    let ZoneD'ExpéditionDuClient (calculateur: ICalculateurD'Expédition, client: Client) =
+        client.CodePostal
+        |> Option.bind calculateur.ObtenirL'État
+        |> Option.map calculateur.ObtenirLaZoneDExpédition
