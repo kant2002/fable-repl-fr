@@ -1,91 +1,90 @@
 module Tour.Classes
 
-// From https://docs.microsoft.com/en-us/dotnet/fsharp/tour
-// Visit the link above for more information on each topic
-// You can also find more learning resources at https://fsharp.org/
+// Extrait de https://docs.microsoft.com/en-us/dotnet/fsharp/tour
+// Consultez le lien ci-dessus pour obtenir plus d'informations sur chaque sujet.
+// Vous trouverez également d'autres ressources d'apprentissage sur https://fsharp.org/
 
-/// Classes are a way of defining new object types in F#, and support standard Object-oriented constructs.
-/// They can have a variety of members (methods, properties, events, etc.)
+/// Les classes permettent de définir de nouveaux types d'objets en F# et prennent en charge les constructions standard de la programmation orientée objet.
+/// Elles peuvent comporter divers membres (méthodes, propriétés, événements, etc.).
 ///
-/// To learn more about Classes, see: https://docs.microsoft.com/dotnet/fsharp/language-reference/classes
+/// Pour en savoir plus sur les classes, consultez : https://docs.microsoft.com/dotnet/fsharp/language-reference/classes
 ///
-/// To learn more about Members, see: https://docs.microsoft.com/dotnet/fsharp/language-reference/members
+/// Pour en savoir plus sur les membres, consultez : https://docs.microsoft.com/dotnet/fsharp/language-reference/members
 
-/// A simple two-dimensional Vector class.
+/// Une classe Vecteur2D simple.
 ///
-/// The class's constructor is on the first line,
-/// and takes two arguments: dx and dy, both of type 'double'.
-type Vector2D(dx : double, dy : double) =
+/// Le constructeur de la classe se trouve sur la première ligne
+/// et prend deux arguments: dx et dy, tous deux de type 'double'.
+type Vecteur2D(dx : double, dy : double) =
 
-    /// This internal field stores the length of the vector, computed when the
-    /// object is constructed
-    let length = sqrt (dx*dx + dy*dy)
+    /// Ce champ interne stocke la longueur du vecteur, calculée lors de la
+    /// construction de l'objet.
+    let longueur = sqrt (dx*dx + dy*dy)
 
-    // 'this' specifies a name for the object's self-identifier.
-    // In instance methods, it must appear before the member name.
+    // 'this' spécifie un nom pour l'identifiant interne de l'objet. 
+    // Dans les méthodes d'instance, il doit précéder le nom du membre.
     member this.DX = dx
 
     member this.DY = dy
 
-    member this.Length = length
+    member this.Longueur = longueur
 
-    /// This member is a method.  The previous members were properties.
-    member this.Scale(k) = Vector2D(k * this.DX, k * this.DY)
+    /// Ce membre est une méthode. Les membres précédents étaient des propriétés.
+    member this.Échelle(k) = Vecteur2D(k * this.DX, k * this.DY)
 
-/// This is how you instantiate the Vector2D class.
-let vector1 = Vector2D(3.0, 4.0)
+/// Voici comment instancier la classe Vecteur2D.
+let vecteur1 = Vecteur2D(3.0, 4.0)
 
-/// Get a new scaled vector object, without modifying the original object.
-let vector2 = vector1.Scale(10.0)
+/// Obtenez un nouvel objet vectoriel mis à l'échelle, sans modifier l'objet d'origine.
+let vecteur2 = vecteur1.Échelle(10.0)
 
-printfn "Length of vector1: %f\nLength of vector2: %f" vector1.Length vector2.Length
+printfn "Longueur du vecteur1: %f\nLongueur du vecteur2: %f" vecteur1.Longueur vecteur2.Longueur
 
 
-/// Generic classes allow types to be defined with respect to a set of type parameters.
-/// In the following, 'T is the type parameter for the class.
+/// Les classes génériques permettent de définir des types en fonction d'un ensemble de paramètres de type.
+/// Dans l'exemple suivant, 'T est le paramètre de type de la classe.
 ///
-/// To learn more, see: https://docs.microsoft.com/dotnet/fsharp/language-reference/generics/
+/// Pour en savoir plus, consultez : https://docs.microsoft.com/dotnet/fsharp/language-reference/generics/
 
-type StateTracker<'T>(initialElement: 'T) =
+type SuiviD'État<'T>(élémentInitial: 'T) =
 
-    /// This internal field store the states in a list.
-    let mutable states = [ initialElement ]
+    /// Ce champ interne stocke les états dans une liste.
+    let mutable états = [ élémentInitial ]
 
-    /// Add a new element to the list of states.
-    member this.UpdateState newState =
-        states <- newState :: states  // use the '<-' operator to mutate the value.
+    /// Ajoutez un nouvel élément à la liste des états.
+    member this.MettreÀJourLÉtat nouvelÉtat =
+        états <- nouvelÉtat :: états  // Utilisez l'opérateur '<-' pour modifier la valeur.
 
-    /// Get the entire list of historical states.
-    member this.History = states
+    /// Obtient la liste entière des états historiques.
+    member this.History = états
 
-    /// Get the latest state.
-    member this.Current = states.Head
+    /// Obtient l'état le plus récent.
+    member this.Current = états.Head
 
-/// An 'int' instance of the state tracker class. Note that the type parameter is inferred.
-let tracker = StateTracker 10
+/// Une instance de type 'int' de la classe de suivi d'état. Notez que le paramètre de type est déduit.
+let suivi = SuiviD'État 10
 
-// Add a state
-tracker.UpdateState 17
+// Ajouter un état
+suivi.MettreÀJourLÉtat 17
 
 
-/// Interfaces are object types with only 'abstract' members.
-/// Object types and object expressions can implement interfaces.
+/// Les interfaces sont des types d'objets ne comportant que des membres « abstraits ».
+/// Les types d'objets et les expressions d'objet peuvent implémenter des interfaces.
 ///
-/// To learn more, see: https://docs.microsoft.com/dotnet/fsharp/language-reference/interfaces
+/// Pour en savoir plus, consultez : https://docs.microsoft.com/dotnet/fsharp/language-reference/interfaces
 
-/// This is a type that implements IDisposable.
-type ReadFile(path: string) =
-    member this.ReadLine() = printfn "Reading %s..." path
+/// Il s'agit d'un type qui implémente IDisposable.
+type LireLeFichier(path: string) =
+    member this.LireLaLigne() = printfn "En lisant %s..." path
 
-    // This is the implementation of IDisposable members.
+    // Il s'agit de l'implémentation des membres de IDisposable.
     interface System.IDisposable with
-        member this.Dispose() = printfn "Closing %s..." path
+        member this.Dispose() = printfn "Fermeture de %s..." path
 
 
-/// This is an object that implements IDisposable via an Object Expression
-/// Unlike other languages such as C#, a new type definition is not needed
-/// to implement an interface.
-let interfaceImplementation =
+/// Il s'agit d'un objet qui implémente IDisposable via une expression d'objet.
+/// Contrairement à d'autres langages comme le C#, aucune nouvelle définition de type n'est nécessaire
+/// pour implémenter une interface.
+let implémentationD'Interface =
     { new System.IDisposable with
-        member this.Dispose() = printfn "disposed" }
-
+        member this.Dispose() = printfn "disposé" }
