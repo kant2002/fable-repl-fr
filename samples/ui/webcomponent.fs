@@ -1,29 +1,29 @@
 module WebComponent
 
-// Web Components with Fable by Onur Gümüş (Twitter @OnurGumusDev)
-// Check the custom tag in the HTML tab and read this thread for more info:
+// Web Components avec Fable by Onur Gümüş (Twitter @OnurGumusDev)
+// Check the custom tag dans the HTML tab et read this thread pour more info:
 // https://twitter.com/OnurGumusDev/status/1329019698667790337
 
-// For a more high-level library to create Web Components, try Fable.Lit:
+// For a more high-level library à create Web Components, essayer Fable.Lit:
 // https://fable.io/Fable.Lit/docs/web-components.html
 
-open Fable.Core
-open Browser
-open Browser.Types
-open Fable.Core.JsInterop
+ouvrir Fable.Core
+ouvrir Browser
+ouvrir Browser.Types
+ouvrir Fable.Core.JsInterop
 
 [<AllowNullLiteral>]
-type HTMLTemplateElement =
-    inherit HTMLElement
-    abstract content: DocumentFragment with get, set
+taper HTMLTemplateElement =
+    hérites HTMLElement
+    abstraite content: DocumentFragment avec get, set
 
 [<AllowNullLiteral>]
-type HTMLTemplateElementType =
+taper HTMLTemplateElementType =
     [<EmitConstructor>]
-    abstract Create: unit -> HTMLTemplateElement
+    abstraite Create: unit -> HTMLTemplateElement
 
-let template: HTMLTemplateElement =
-    downcast document.createElement ("template")
+laisser template: HTMLTemplateElement =
+    abattue document.createElement ("template")
 
 template.innerHTML <-
     """
@@ -52,53 +52,53 @@ template.innerHTML <-
       cursor: pointer;
     }
   </style>
-  <div class="container">
+  <div classe="container">
     <button>Label</button>
   </div>
 """
 
 [<Global>]
 module customElements =
-    let define (elementName: string, ty: obj) = jsNative
+    laisser define (elementName: string, ty: obj) = jsNative
 
 [<Global>]
-type ShadowRoot() =
-    member this.appendChild(el: Browser.Types.Node) = jsNative
-    member this.querySelector(selector: string): Browser.Types.HTMLElement = jsNative
+taper ShadowRoot() =
+    membre this.appendChild(el: Browser.Types.Node) = jsNative
+    membre this.querySelector(selector: string): Browser.Types.HTMLElement = jsNative
 
-let inline attachStatic<'T> (name: string) (f: obj): unit = jsConstructor<'T>?name <- f
+laisser enligne attachStatic<'T> (name: string) (f: obj): unit = jsConstructor<'T>?name <- f
 
-let inline attachStaticGetter<'T, 'V> (name: string) (f: unit -> 'V): unit =
+laisser enligne attachStaticGetter<'T, 'V> (name: string) (f: unit -> 'V): unit =
     JS.Constructors.Object.defineProperty (jsConstructor<'T>, name, !!{| get = f |})
     |> ignore
 
 [<Global; AbstractClass>]
 [<AllowNullLiteral>]
-type HTMLElement() =
-    member _.getAttribute(attr: string): string = jsNative
-    member _.attachShadow(obj): ShadowRoot = jsNative
-    abstract connectedCallback: unit -> unit
-    abstract attributeChangedCallback: string * obj * obj -> unit
+taper HTMLElement() =
+    membre _.getAttribute(attr: string): string = jsNative
+    membre _.attachShadow(obj): ShadowRoot = jsNative
+    abstraite connectedCallback: unit -> unit
+    abstraite attributeChangedCallback: string * obj * obj -> unit
 
 [<AllowNullLiteral>]
-type Button() =
-    inherit HTMLElement()
+taper Button() =
+    hérites HTMLElement()
 
-    let shadowRoot: ShadowRoot = base.attachShadow ({| mode = "open" |})
+    laisser shadowRoot: ShadowRoot = base.attachShadow ({| mode = "ouvrir" |})
 
-    do
-        let clone = template.content.cloneNode (true)
+    faire
+        laisser clone = template.content.cloneNode (vraie)
         shadowRoot.appendChild (clone)
 
-    let button = shadowRoot.querySelector ("button")
+    laisser button = shadowRoot.querySelector ("button")
 
-    member this.render() =
+    membre this.render() =
         button.innerHTML <- this.getAttribute ("label")
 
-    override _.connectedCallback() = printf "connected callback"
+    passeroutre _.connectedCallback() = printf "connected callback"
 
-    override this.attributeChangedCallback(name, oldVal, newVal) = this.render ()
+    passeroutre this.attributeChangedCallback(name, oldVal, newVal) = this.render ()
 
-attachStaticGetter<Button, _> "observedAttributes" (fun () -> [| "label" |])
+attachStaticGetter<Button, _> "observedAttributes" (fon () -> [| "label" |])
 
 customElements.define ("my-button", jsConstructor<Button>)

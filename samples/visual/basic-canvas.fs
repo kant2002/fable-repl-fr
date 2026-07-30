@@ -1,15 +1,15 @@
 module BasicCanvas
 
-open Fable.Core
-open Fable.Core.JsInterop
-open Browser.Types
-open Browser
+ouvrir Fable.Core
+ouvrir Fable.Core.JsInterop
+ouvrir Browser.Types
+ouvrir Browser
 
-let init() =
-    let canvas = document.querySelector(".view") :?> HTMLCanvasElement
+laisser init() =
+    laisser canvas = document.querySelector(".view") :?> HTMLCanvasElement
 
-    let ctx = canvas.getContext_2d()
-    // The (!^) operator checks and casts a value to an Erased Union type
+    laisser ctx = canvas.getContext_2d()
+    // The (!^) operator checks et casts a value à an Erased Union taper
     // See http://fable.io/docs/interacting.html#Erase-attribute
     ctx.fillStyle <- !^"rgb(200,0,0)"
     ctx.fillRect (10., 10., 55., 50.)

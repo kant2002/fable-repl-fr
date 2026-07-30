@@ -1,55 +1,55 @@
 module SpreadSheet
 
-// Build your own Excel 365 in an hour with F# by Tomas Petricek!
-// Watch the video of the talk here: https://www.youtube.com/watch?v=Bnm71YEt_lI
+// Build your own Excel 365 dans an hour avec F# by Tomas Petricek!
+// Watch the video de the talk here: https://www.youtube.com/watch?v=Bnm71YEt_lI
 
 module Elmish =
 
-    open System
-    open Fable.Core
-    open Browser
-    open Browser.Types
+    ouvrir System
+    ouvrir Fable.Core
+    ouvrir Browser
+    ouvrir Browser.Types
 
     // ------------------------------------------------------------------------------------------------
     // Virtual Dom bindings
     // ------------------------------------------------------------------------------------------------
 
-    type IVirtualdom =
-        abstract h: arg1: string * arg2: obj * arg3: obj[] -> obj
-        abstract diff: tree1:obj * tree2:obj -> obj
-        abstract patch: node:obj * patches:obj -> Node
-        abstract create: e:obj -> Node
+    taper IVirtualdom =
+        abstraite h: arg1: string * arg2: obj * arg3: obj[] -> obj
+        abstraite diff: tree1:obj * tree2:obj -> obj
+        abstraite patch: node:obj * patches:obj -> Node
+        abstraite create: e:obj -> Node
 
     [<Global("virtualDom")>]
-    let Virtualdom: IVirtualdom = jsNative
+    laisser Virtualdom: IVirtualdom = jsNative
 
     // ------------------------------------------------------------------------------------------------
-    // F# representation of DOM and rendering using VirtualDom
+    // F# representation de DOM et rendering using VirtualDom
     // ------------------------------------------------------------------------------------------------
 
-    type DomAttribute =
-        | EventHandler of (Event -> unit)
-        | Attribute of string
-        | Property of string
+    taper DomAttribute =
+        | EventHandler de (Event -> unit)
+        | Attribute de string
+        | Property de string
 
-    type DomNode =
-        | Text of string
-        | Element of tag:string * attributes:(string * DomAttribute)[] * children : DomNode[]
+    taper DomNode =
+        | Text de string
+        | Element de tag:string * attributes:(string * DomAttribute)[] * children : DomNode[]
 
-    let createTree tag args children =
-        let attrs = ResizeArray<_>()
-        let props = ResizeArray<_>()
-        for k, v in args do
-            match k, v with
+    laisser createTree tag args children =
+        laisser attrs = ResizeArray<_>()
+        laisser props = ResizeArray<_>()
+        pour k, v dans args faire
+            correspondre k, v avec
             | "style", Attribute v
             | "style", Property v ->
-                    let args = v.Split(';') |> Array.map (fun a ->
-                        let sep = a.IndexOf(':')
-                        if sep > 0 then a.Substring(0, sep), box (a.Substring(sep+1))
-                        else a, box "" )
+                    laisser args = v.Split(';') |> Array.map (fon a ->
+                        laisser sep = a.IndexOf(':')
+                        si sep > 0 alors a.Substring(0, sep), box (a.Substring(sep+1))
+                        autre a, box "" )
                     props.Add ("style", JsInterop.createObj args)
-            | "class", Attribute v
-            | "class", Property v ->
+            | "classe", Attribute v
+            | "classe", Property v ->
                     attrs.Add (k, box v)
             | k, Attribute v ->
                     attrs.Add (k, box v)
@@ -57,297 +57,297 @@ module Elmish =
                     props.Add (k, box v)
             | k, EventHandler f ->
                     props.Add (k, box f)
-        let attrs = JsInterop.createObj attrs
-        let props = JsInterop.createObj (Seq.append ["attributes", attrs] props)
-        let elem = Virtualdom.h(tag, props, children)
+        laisser attrs = JsInterop.createObj attrs
+        laisser props = JsInterop.createObj (Seq.append ["attributes", attrs] props)
+        laisser elem = Virtualdom.h(tag, props, children)
         elem
 
-    let rec render node =
-        match node with
+    laisser réc render node =
+        correspondre node avec
         | Text(s) ->
                 box s
         | Element(tag, attrs, children) ->
                 createTree tag attrs (Array.map render children)
 
     // ------------------------------------------------------------------------------------------------
-    // Helpers for dynamic property access & for creating HTML elements
+    // Helpers pour dynamic property access & pour creating HTML elements
     // ------------------------------------------------------------------------------------------------
 
-    type Dynamic() =
+    taper Dynamic() =
         [<Emit("$0[$1]")>]
-        static member (?) (d:Dynamic, s:string) : Dynamic = jsNative
+        statique membre (?) (d:Dynamic, s:string) : Dynamic = jsNative
 
-    let text s = Text(s)
-    let (=>) k v = k, Property(v)
-    let (=!>) k f = k, EventHandler(fun e -> f e)
+    laisser text s = Text(s)
+    laisser (=>) k v = k, Property(v)
+    laisser (=!>) k f = k, EventHandler(fon e -> f e)
 
-    type El() =
-        static member (?) (_:El, n:string) = fun a b ->
+    taper El() =
+        statique membre (?) (_:El, n:string) = fon a b ->
             Element(n, Array.ofList a, Array.ofList b)
 
-    let h = El()
+    laisser h = El()
 
     // ------------------------------------------------------------------------------------------------
-    // Entry point - create event and update on trigger
+    // Entry point - create event et update on trigger
     // ------------------------------------------------------------------------------------------------
 
-    type Cmd<'Msg> = (('Msg -> unit) -> unit) list
+    taper Cmd<'Msg> = (('Msg -> unit) -> unit) list
 
-    type SingleObservable<'T>() =
-        let mutable listener: IObserver<'T> option = None
-        member _.Trigger v =
-            match listener with
+    taper SingleObservable<'T>() =
+        laisser mutable listener: IObserver<'T> option = None
+        membre _.Trigger v =
+            correspondre listener avec
             | Some lis -> lis.OnNext v
             | None -> ()
-        interface IObservable<'T> with
-            member _.Subscribe w =
+        interface IObservable<'T> avec
+            membre _.Subscribe w =
                 listener <- Some w
-                { new IDisposable with
-                    member _.Dispose() = () }
+                { nouvelle IDisposable avec
+                    membre _.Dispose() = () }
 
-    let app id (init: unit -> 'Model * Cmd<'Msg>) update view =
-        let event = new Event<'Msg>()
-        let trigger e = event.Trigger(e)
-        let model, cmds = init()
-        let mutable state = model
-        let mutable tree = view state trigger |> render
-        let mutable container = Virtualdom.create(tree)
+    laisser app id (init: unit -> 'Model * Cmd<'Msg>) update view =
+        laisser event = nouvelle Event<'Msg>()
+        laisser trigger e = event.Trigger(e)
+        laisser model, cmds = init()
+        laisser mutable state = model
+        laisser mutable tree = view state trigger |> render
+        laisser mutable container = Virtualdom.create(tree)
         document.getElementById(id).appendChild(container) |> ignore
 
-        let handleEvent evt =
-            let model, cmds = update evt state
-            let newTree = view model trigger |> render
-            let patches = Virtualdom.diff(tree, newTree)
+        laisser handleEvent evt =
+            laisser model, cmds = update evt state
+            laisser newTree = view model trigger |> render
+            laisser patches = Virtualdom.diff(tree, newTree)
             container <- Virtualdom.patch(container, patches)
             tree <- newTree
             state <- model
-            for cmd in cmds do
+            pour cmd dans cmds faire
                 cmd trigger
 
         event.Publish.Add(handleEvent)
-        for cmd in cmds do
+        pour cmd dans cmds faire
             cmd trigger
 
 module Parsec =
-    type ParseStream<'T> = int * list<'T>
-    type Parser<'T, 'R> = Parser of (ParseStream<'T> -> option<ParseStream<'T> * 'R>)
+    taper ParseStream<'T> = int * list<'T>
+    taper Parser<'T, 'R> = Parser de (ParseStream<'T> -> option<ParseStream<'T> * 'R>)
 
-    /// Returned by the `slot` function to create a parser slot that is filled later
-    type ParserSetter<'T, 'R> =
+    /// Returned by the `slot` fonction à create a parser slot that is filled later
+    taper ParserSetter<'T, 'R> =
       { Set : Parser<'T, 'R> -> unit }
 
-    /// Ignore the result of the parser
-    let ignore (Parser p) = Parser(fun input ->
-      p input |> Option.map (fun (i, r) -> i, ()))
+    /// Ignore the result de the parser
+    laisser ignore (Parser p) = Parser(fon input ->
+      p input |> Option.map (fon (i, r) -> i, ()))
 
     /// Creates a delayed parser whose actual parser is set later
-    let slot () =
-      let mutable slot = None
-      { Set = fun (Parser p) -> slot <- Some p },
-      Parser(fun input ->
-        match slot with
+    laisser slot () =
+      laisser mutable slot = None
+      { Set = fon (Parser p) -> slot <- Some p },
+      Parser(fon input ->
+        correspondre slot avec
         | Some slot -> slot input
         | None -> failwith "Slot not initialized")
 
     /// If the input matches the specified prefix, produce the specified result
-    let prefix (prefix:list<'C>) result = Parser(fun (offset, input) ->
-      let rec loop (word:list<'C>) input =
-        match word, input with
-        | c::word, i::input when c = i -> loop word input
+    laisser prefix (prefix:list<'C>) result = Parser(fon (offset, input) ->
+      laisser réc loop (word:list<'C>) input =
+        correspondre word, input avec
+        | c::word, i::input quand c = i -> loop word input
         | [], input -> Some(input)
         | _ -> None
 
-      match loop prefix input with
+      correspondre loop prefix input avec
       | Some(input) -> Some((offset+List.length prefix, input), result)
       | _ -> None)
 
-    /// Parser that succeeds when either of the two arguments succeed
-    let (<|>) (Parser p1) (Parser p2) = Parser(fun input ->
-      match p1 input with
+    /// Parser that succeeds quand either de the two arguments succeed
+    laisser (<|>) (Parser p1) (Parser p2) = Parser(fon input ->
+      correspondre p1 input avec
       | Some(input, res) -> Some(input, res)
       | _ -> p2 input)
 
-    /// Run two parsers in sequence and return the result as a tuple
-    let (<*>) (Parser p1) (Parser p2) = Parser(fun input ->
-      match p1 input with
+    /// Run two parsers dans sequence et retour the result comme a tuple
+    laisser (<*>) (Parser p1) (Parser p2) = Parser(fon input ->
+      correspondre p1 input avec
       | Some(input, res1) ->
-          match p2 input with
+          correspondre p2 input avec
           | Some(input, res2) -> Some(input, (res1, res2))
           | _ -> None
       | _ -> None)
 
-    /// Transforms the result of the parser using the specified function
-    let map f (Parser p) = Parser(fun input ->
-      p input |> Option.map (fun (input, res) -> input, f res))
+    /// Transforms the result de the parser using the specified fonction
+    laisser map f (Parser p) = Parser(fon input ->
+      p input |> Option.map (fon (input, res) -> input, f res))
 
-    /// Run two parsers in sequence and return the result of the second one
-    let (<*>>) p1 p2 = p1 <*> p2 |> map snd
+    /// Run two parsers dans sequence et retour the result de the second one
+    laisser (<*>>) p1 p2 = p1 <*> p2 |> map snd
 
-    /// Run two parsers in sequence and return the result of the first one
-    let (<<*>) p1 p2 = p1 <*> p2 |> map fst
+    /// Run two parsers dans sequence et retour the result de the first one
+    laisser (<<*>) p1 p2 = p1 <*> p2 |> map fst
 
     /// Succeed without consuming input
-    let unit res = Parser(fun input -> Some(input, res))
+    laisser unit res = Parser(fon input -> Some(input, res))
 
-    /// Parse using the first parser and then call a function to produce
-    /// next parser and parse the rest of the input with the next parser
-    let bind f (Parser p) = Parser(fun input ->
-      match p input with
+    /// Parse using the first parser et alors call a fonction à produce
+    /// next parser et parse the rest de the input avec the next parser
+    laisser bind f (Parser p) = Parser(fon input ->
+      correspondre p input avec
       | Some(input, res) ->
-          let (Parser g) = f res
-          match g input with
+          laisser (Parser g) = f res
+          correspondre g input avec
           | Some(input, res) -> Some(input, res)
           | _ -> None
       | _ -> None)
 
-    /// Parser that tries to use a specified parser, but returns None if it fails
-    let optional (Parser p) = Parser(fun input ->
-      match p input with
+    /// Parser that tries à utiliser a specified parser, but returns None si it fails
+    laisser optional (Parser p) = Parser(fon input ->
+      correspondre p input avec
       | None -> Some(input, None)
       | Some(input, res) -> Some(input, Some res) )
 
-    /// Parser that succeeds if the input matches a predicate
-    let pred p = Parser(function
-      | offs, c::input when p c -> Some((offs+1, input), c)
+    /// Parser that succeeds si the input matches a predicate
+    laisser pred p = Parser(fonction
+      | offs, c::input quand p c -> Some((offs+1, input), c)
       | _ -> None)
 
-    /// Parser that succeeds if the predicate returns Some value
-    let choose p = Parser(function
-      | offs, c::input -> p c |> Option.map (fun c -> (offs + 1, input), c)
+    /// Parser that succeeds si the predicate returns Some value
+    laisser choose p = Parser(fonction
+      | offs, c::input -> p c |> Option.map (fon c -> (offs + 1, input), c)
       | _ -> None)
 
-    /// Parse zero or more repetitions using the specified parser
-    let zeroOrMore (Parser p) =
-      let rec loop acc input =
-        match p input with
+    /// Parse zero ou more repetitions using the specified parser
+    laisser zeroOrMore (Parser p) =
+      laisser réc loop acc input =
+        correspondre p input avec
         | Some(input, res) -> loop (res::acc) input
         | _ -> Some(input, List.rev acc)
       Parser(loop [])
 
-    /// Parse one or more repetitions using the specified parser
-    let oneOrMore p =
+    /// Parse one ou more repetitions using the specified parser
+    laisser oneOrMore p =
       (p <*> (zeroOrMore p))
-      |> map (fun (c, cs) -> c::cs)
+      |> map (fon (c, cs) -> c::cs)
 
 
-    let anySpace = zeroOrMore (pred (fun t -> t = ' '))
+    laisser anySpace = zeroOrMore (pred (fon t -> t = ' '))
 
-    let char tok = pred (fun t -> t = tok)
+    laisser char tok = pred (fon t -> t = tok)
 
-    let separated sep p =
+    laisser separated sep p =
       p <*> zeroOrMore (sep <*> p)
-      |> map (fun (a1, args) -> a1::(List.map snd args))
+      |> map (fon (a1, args) -> a1::(List.map snd args))
 
-    let separatedThen sep p1 p2 =
+    laisser separatedThen sep p1 p2 =
       p1 <*> zeroOrMore (sep <*> p2)
-      |> map (fun (a1, args) -> a1::(List.map snd args))
+      |> map (fon (a1, args) -> a1::(List.map snd args))
 
-    let separatedOrEmpty sep p =
+    laisser separatedOrEmpty sep p =
       optional (separated sep p)
-      |> map (fun l -> defaultArg l [])
+      |> map (fon l -> defaultArg l [])
 
-    let number = pred (fun t -> t <= '9' && t >= '0')
+    laisser number = pred (fon t -> t <= '9' && t >= '0')
 
-    let integer = oneOrMore number |> map (fun nums ->
-      nums |> List.fold (fun res n -> res * 10 + (int n - int '0')) 0)
+    laisser integer = oneOrMore number |> map (fon nums ->
+      nums |> List.fold (fon res n -> res * 10 + (int n - int '0')) 0)
 
-    let letter = pred (fun t ->
+    laisser letter = pred (fon t ->
       (t <= 'Z' && t >= 'A') || (t <= 'z' && t >= 'a'))
 
-    let run (Parser(f)) input =
-      match f (0, List.ofSeq input) with
-      | Some((i, _), res) when i = Seq.length input -> Some res
+    laisser run (Parser(f)) input =
+      correspondre f (0, List.ofSeq input) avec
+      | Some((i, _), res) quand i = Seq.length input -> Some res
       | _ -> None
 
 module Evaluator =
-    open Parsec
+    ouvrir Parsec
 
     // ----------------------------------------------------------------------------
     // DOMAIN MODEL
     // ----------------------------------------------------------------------------
 
-    type Position = char * int
+    taper Position = char * int
 
-    type Expr =
-      | Reference of Position
-      | Number of int
-      | Binary of Expr * char * Expr
+    taper Expr =
+      | Reference de Position
+      | Number de int
+      | Binary de Expr * char * Expr
 
     // ----------------------------------------------------------------------------
     // PARSER
     // ----------------------------------------------------------------------------
 
     // Basics: operators (+, -, *, /), cell reference (e.g. A10), number (e.g. 123)
-    let operator = char '+' <|> char '-' <|> char '*' <|> char '/'
-    let reference = letter <*> integer |> map Reference
-    let number = integer |> map Number
+    laisser operator = char '+' <|> char '-' <|> char '*' <|> char '/'
+    laisser reference = letter <*> integer |> map Reference
+    laisser number = integer |> map Number
 
-    // Nested operator uses need to be parethesized, for example (1 + (3 * 4)).
-    // <expr> is a binary operator without parentheses, number, reference or
-    // nested brackets, while <term> is always bracketed or primitive. We need
-    // to use `expr` recursively, which is handled via mutable slots.
-    let exprSetter, expr = slot ()
-    let brack = char '(' <*>> anySpace <*>> expr <<*> anySpace <<*> char ')'
-    let term = number <|> reference <|> brack
-    let binary = term <<*> anySpace <*> operator <<*> anySpace <*> term |> map (fun ((l,op), r) -> Binary(l, op, r))
-    let exprAux = binary <|> term
+    // Nested operator uses need à be parethesized, pour example (1 + (3 * 4)).
+    // <expr> is a binary operator without parentheses, number, reference ou
+    // nested brackets, alorsque <term> is always bracketed ou primitive. We need
+    // à utiliser `expr` recursively, which is handled via mutable slots.
+    laisser exprSetter, expr = slot ()
+    laisser brack = char '(' <*>> anySpace <*>> expr <<*> anySpace <<*> char ')'
+    laisser term = number <|> reference <|> brack
+    laisser binary = term <<*> anySpace <*> operator <<*> anySpace <*> term |> map (fon ((l,op), r) -> Binary(l, op, r))
+    laisser exprAux = binary <|> term
     exprSetter.Set exprAux
 
-    // Formula starts with `=` followed by expression
-    // Equation you can write in a cell is either number or a formula
-    let formula = char '=' <*>> anySpace <*>> expr
-    let equation = anySpace <*>> (formula <|> number) <<*> anySpace
+    // Formula starts avec `=` followed by expression
+    // Equation you can write dans a cell is either number ou a formula
+    laisser formula = char '=' <*>> anySpace <*>> expr
+    laisser equation = anySpace <*>> (formula <|> number) <<*> anySpace
 
     // Run the parser on a given input
-    let parse input = run equation input
+    laisser parse input = run equation input
 
     // ----------------------------------------------------------------------------
     // EVALUATOR
     // ----------------------------------------------------------------------------
 
-    let rec evaluate visited (cells:Map<Position, string>) expr =
-      match expr with
+    laisser réc evaluate visited (cells:Map<Position, string>) expr =
+      correspondre expr avec
       | Number num ->
           Some num
 
       | Binary(l, op, r) ->
-          let ops = dict [ '+', (+); '-', (-); '*', (*); '/', (/) ]
-          evaluate visited cells l |> Option.bind (fun l ->
-            evaluate visited cells r |> Option.map (fun r ->
+          laisser ops = dict [ '+', (+); '-', (-); '*', (*); '/', (/) ]
+          evaluate visited cells l |> Option.bind (fon l ->
+            evaluate visited cells r |> Option.map (fon r ->
               ops.[op] l r ))
 
-      | Reference pos when Set.contains pos visited ->
+      | Reference pos quand Set.contains pos visited ->
           None
 
       | Reference pos ->
-          cells.TryFind pos |> Option.bind (fun value ->
-            parse value |> Option.bind (fun parsed ->
+          cells.TryFind pos |> Option.bind (fon value ->
+            parse value |> Option.bind (fon parsed ->
               evaluate (Set.add pos visited) cells parsed))
 
-open Elmish
-open Evaluator
+ouvrir Elmish
+ouvrir Evaluator
 
 // ----------------------------------------------------------------------------
 // DOMAIN MODEL
 // ----------------------------------------------------------------------------
 
-type Event =
-  | UpdateValue of Position * string
-  | StartEdit of Position
+taper Event =
+  | UpdateValue de Position * string
+  | StartEdit de Position
 
-type State =
+taper State =
   { Rows : int list
     Active : Position option
     Cols : char list
     Cells : Map<Position, string> }
 
-type Movement =
-    | MoveTo of Position
+taper Movement =
+    | MoveTo de Position
     | Invalid
 
-type Direction = Up | Down | Left | Right
+taper Direction = Up | Down | Left | Right
 
-let KeyDirection : Map<string, Direction> = Map.ofList [
+laisser KeyDirection : Map<string, Direction> = Map.ofList [
   ("ArrowLeft", Left)
   ("ArrowUp", Up)
   ("ArrowRight", Right)
@@ -358,87 +358,87 @@ let KeyDirection : Map<string, Direction> = Map.ofList [
 // EVENT HANDLING
 // ----------------------------------------------------------------------------
 
-let update msg state =
-  match msg with
+laisser update msg state =
+  correspondre msg avec
   | StartEdit(pos) ->
-      { state with Active = Some pos }, []
+      { state avec Active = Some pos }, []
 
   | UpdateValue(pos, value) ->
-      let newCells =
-          if value = ""
-              then Map.remove pos state.Cells
-              else Map.add pos value state.Cells
-      { state with Cells = newCells }, []
+      laisser newCells =
+          si value = ""
+              alors Map.remove pos state.Cells
+              autre Map.add pos value state.Cells
+      { state avec Cells = newCells }, []
 
 // ----------------------------------------------------------------------------
 // RENDERING
 // ----------------------------------------------------------------------------
 
-let getDirection (ke: Browser.Types.KeyboardEvent) : Option<Direction> =
+laisser getDirection (ke: Browser.Types.KeyboardEvent) : Option<Direction> =
     Map.tryFind ke.key KeyDirection
 
-let getPosition ((col, row): Position) (direction: Direction) : Position =
-    match direction with
+laisser getPosition ((col, row): Position) (direction: Direction) : Position =
+    correspondre direction avec
     | Up -> (col, row - 1)
     | Down -> (col, row + 1)
     | Left -> (char((int col) - 1), row)
     | Right -> (char((int col) + 1), row)
 
-let getMovement (state: State) (direction: Direction) : Movement =
-    match state.Active with
+laisser getMovement (state: State) (direction: Direction) : Movement =
+    correspondre state.Active avec
     | None -> Invalid
     | (Some position) ->
-        let (col, row) = getPosition position direction
-        if List.contains col state.Cols && List.contains row state.Rows
-            then MoveTo (col, row)
-            else Invalid
+        laisser (col, row) = getPosition position direction
+        si List.contains col state.Cols && List.contains row state.Rows
+            alors MoveTo (col, row)
+            autre Invalid
 
-let getKeyPressEvent state trigger = fun (ke: Browser.Types.Event) ->
-    match getDirection (ke :?> _) with
+laisser getKeyPressEvent state trigger = fon (ke: Browser.Types.Event) ->
+    correspondre getDirection (ke :?> _) avec
     | None -> ()
     | Some direction ->
-        match getMovement state direction with
+        correspondre getMovement state direction avec
         | Invalid -> ()
         | MoveTo position -> trigger(StartEdit(position))
 
-let renderEditor (trigger:Event -> unit) pos state value =
-  h?td [ "class" => "selected" ] [
+laisser renderEditor (trigger:Event -> unit) pos state value =
+  h?td [ "classe" => "selected" ] [
     h?input [
-      "autofocus" => "true"
+      "autofocus" => "vraie"
       "onkeydown" =!> (getKeyPressEvent state trigger)
-      "oninput" =!> (fun e -> trigger (UpdateValue (pos, (e.target :?> Browser.Types.HTMLInputElement).value)))
+      "oninput" =!> (fon e -> trigger (UpdateValue (pos, (e.target :?> Browser.Types.HTMLInputElement).value)))
       "value" => value ] []
   ]
 
-let renderView trigger pos (value:option<_>) =
+laisser renderView trigger pos (value:option<_>) =
   h?td
-    [ "style" => (if value.IsNone then "background:#ffb0b0" else "background:white")
-      "onclick" =!> (fun _ -> trigger(StartEdit(pos)) ) ]
+    [ "style" => (si value.IsNone alors "background:#ffb0b0" autre "background:white")
+      "onclick" =!> (fon _ -> trigger(StartEdit(pos)) ) ]
     [ Text (Option.defaultValue "#ERR" value) ]
 
-let renderCell trigger pos state =
-  let value = Map.tryFind pos state.Cells
-  if state.Active = Some pos then
+laisser renderCell trigger pos state =
+  laisser value = Map.tryFind pos state.Cells
+  si state.Active = Some pos alors
     renderEditor trigger pos state (Option.defaultValue "" value)
-  else
-    let value =
-      match value with
+  autre
+    laisser value =
+      correspondre value avec
       | Some value ->
           parse value |> Option.bind (evaluate Set.empty state.Cells) |> Option.map string
       | _ -> Some ""
     renderView trigger pos value
 
-let view state trigger =
-  let empty = h?td [] []
-  let header htext = h?th [] [Text htext]
-  let headers = state.Cols |> List.map (fun h -> header (string h))
-  let headers = empty::headers
+laisser view state trigger =
+  laisser empty = h?td [] []
+  laisser header htext = h?th [] [Text htext]
+  laisser headers = state.Cols |> List.map (fon h -> header (string h))
+  laisser headers = empty::headers
 
-  let row cells = h?tr [] cells
-  let cells n =
-    let cells = state.Cols |> List.map (fun h -> renderCell trigger (h, n) state)
+  laisser row cells = h?tr [] cells
+  laisser cells n =
+    laisser cells = state.Cols |> List.map (fon h -> renderCell trigger (h, n) state)
     header (string n) :: cells
-  let rows = state.Rows |> List.map (fun r -> h?tr [] (cells r))
+  laisser rows = state.Rows |> List.map (fon r -> h?tr [] (cells r))
 
   h?table [] [
     h?tr [] headers
@@ -449,7 +449,7 @@ let view state trigger =
 // ENTRY POINT
 // ----------------------------------------------------------------------------
 
-let initial () =
+laisser initial () =
   { Cols = ['A' .. 'K']
     Rows = [1 .. 15]
     Active = None

@@ -7,33 +7,33 @@ module Tour.Fonctions
 module FonctionsDeBase =
 
     /// Vous utilisez "laisser" pour définir une fonction. Celle-ci accepte un argument entier et renvoie un entier.
-    /// Les parenthèses sont facultatives pour les arguments de fonction, sauf lorsque vous utilisez une annotation de type explicite.
-    let fonctionD'Example1 x = x*x + 3
+    /// Les parenthèses sont facultatives pour les arguments de fonction, sauf lorsque vous utilisez une annotation de taper explicite.
+    laisser fonctionD'Example1 x = x*x + 3
 
     /// Appliquez la fonction, en nommant le résultat avec "laisser".
-    /// Le type de la variable est déduit du type de retour de la fonction.
-    let résultat1 = fonctionD'Example1 4573
+    /// Le taper de la variable est déduit du taper de retour de la fonction.
+    laisser résultat1 = fonctionD'Example1 4573
 
     // Cette ligne utilise '%d' pour afficher le résultat en tant qu'entier. Ceci est sécurisé.
-    // Si 'résultat1' n'était pas de type 'int', alors la ligne échouerait à la compilation.
+    // Si 'résultat1' n'était pas de taper 'int', alors la ligne échouerait à la compilation.
     printfn "Résultat de l'élévation au carré de l'entier 4573 et de l'ajout de 3 est %d" résultat1
 
-    /// Lorsque nécessaire, annotez le type d'un nom de paramètre en utilisant `(argument:type)`. Les parenthèses sont obligatoires.
-    let fonctionD'Example2 (x:int) = 2*x*x - x/5 + 3
+    /// Lorsque nécessaire, annotez le taper d'un nom de paramètre en utilisant `(argument:taper)`. Les parenthèses sont obligatoires.
+    laisser fonctionD'Example2 (x:int) = 2*x*x - x/5 + 3
 
-    let résultat2 = fonctionD'Example2 (7 + 4)
+    laisser résultat2 = fonctionD'Example2 (7 + 4)
     printfn "Le résultat de l'application de la 2ème fonction d'exemple à (7 + 4) est : %d" résultat2
 
-    /// Les conditions utilisent if/then/elif/else.
+    /// Les conditions utilisent si/alors/autsi/autre.
     ///
     /// Remarque : F# utilise une syntaxe basée sur l'indentation de l'espace blanc, similaire aux langages comme Python.
-    let fonctionD'Example3 x =
-        if x < 100.0 then
+    laisser fonctionD'Example3 x =
+        si x < 100.0 alors
             2.0*x*x - x/5.0 + 3.0
-        else
+        autre
             2.0*x*x + x/5.0 - 37.0
 
-    let résultat3 = fonctionD'Example3 (6.5 + 4.5)
+    laisser résultat3 = fonctionD'Example3 (6.5 + 4.5)
 
     // Cette ligne utilise `%f` pour afficher le résultat en tant que nombre à virgule flottante. Comme pour `%d` ci-dessus, ceci est sécurisé.
     printfn "Le résultat de l'application de la 3ème fonction d'exemple à (6,5 + 4,5) est %f" résultat3
@@ -45,11 +45,11 @@ module Immuabilité =
     /// 
     /// La deuxième ligne de code ne se compile pas car "nombre" est immuable et lié.
     /// Il n'est pas possible de redéfinir "nombre" pour qu'il ait une autre valeur dans F#.
-    let nombre = 2
-    // let nombre = 3
+    laisser nombre = 2
+    // laisser nombre = 3
 
     /// Une liaison mutable. Ceci est nécessaire pour pouvoir modifier la valeur de "autreNombre".
-    let mutable autreNombre = 2
+    laisser mutable autreNombre = 2
 
     printfn "'autreNombre' est %d" autreNombre
 
@@ -64,23 +64,23 @@ module Immuabilité =
 module PipelinesEtComposition =
 
     /// Élève un nombre au carré
-    let carré x = x * x
+    laisser carré x = x * x
 
     /// Ajoute 1 à une valeur
-    let ajouteUn x = x + 1
+    laisser ajouteUn x = x + 1
 
     /// Vérifie si une valeur entière est impaire en utilisant le modulo.
-    let estImpair x = x % 2 <> 0
+    laisser estImpair x = x % 2 <> 0
 
     /// Une liste de 5 nombres. Plus d'informations sur les listes plus tard.
-    let nombres = [ 1; 2; 3; 4; 5 ]
+    laisser nombres = [ 1; 2; 3; 4; 5 ]
 
     /// Étant donné une liste d'entiers, elle filtre les nombres pairs,
     /// élève au carré les impairs résultants et ajoute 1 aux impairs carrés.
-    let éleverAuCarréLesValeursImpairesEtAjouterUn valeurs =
-        let impairs = List.filter estImpair valeurs
-        let carrés = List.map carré odds
-        let résultat = List.map ajouteUn carrés
+    laisser éleverAuCarréLesValeursImpairesEtAjouterUn valeurs =
+        laisser impairs = List.filter estImpair valeurs
+        laisser carrés = List.map carré odds
+        laisser résultat = List.map ajouteUn carrés
         résultat
 
     printfn "Le traitement de %A via 'éleverAuCarréLesValeursImpairesEtAjouterUn' produit: %A"
@@ -91,7 +91,7 @@ module PipelinesEtComposition =
     ///
     /// Cela rend la fonction beaucoup plus courte, mais il est difficile de voir l'ordre
     /// dans lequel les données sont traitées.
-    let éleverAuCarréLesValeursImpairesEtAjouterUnImbriqué valeurs =
+    laisser éleverAuCarréLesValeursImpairesEtAjouterUnImbriqué valeurs =
         List.map ajouteUn (List.map carré (List.filter estImpair valeurs))
 
     printfn "Le traitement %A via 'éleverAuCarréLesValeursImpairesEtAjouterUnImbriqué' produit: %A"
@@ -102,7 +102,7 @@ module PipelinesEtComposition =
     /// Cela vous permet d'éviter de créer des résultats intermédiaires, 
     /// mais c'est beaucoup plus lisible que le fait d'imbriquer des appels 
     /// de fonction comme "éleverAuCarréLesValeursImpairesEtAjouterUnImbriqué".
-    let éleverAuCarréLesValeursImpairesEtAjouterPipeline valeurs =
+    laisser éleverAuCarréLesValeursImpairesEtAjouterPipeline valeurs =
         valeurs
         |> List.filter estImpair
         |> List.map carré
@@ -116,10 +116,10 @@ module PipelinesEtComposition =
     ///
     /// Remarque : les pipelines sont également utilisés à l'intérieur de la fonction lambda. Les opérateurs de canalisation F# peuvent être
     /// utilisés pour des valeurs uniques. Cela les rend très puissants pour le traitement des données.
-    let squareOddValuesAndAddOneShorterPipeline valeurs =
+    laisser squareOddValuesAndAddOneShorterPipeline valeurs =
         valeurs
         |> List.filter estImpair
-        |> List.map(fun x -> x |> carré |> ajouteUn)
+        |> List.map(fon x -> x |> carré |> ajouteUn)
 
     printfn "Le traitment %A via 'squareOddValuesAndAddOneShorterPipeline' produit: %A"
         nombres (squareOddValuesAndAddOneShorterPipeline nombres)
@@ -128,9 +128,9 @@ module PipelinesEtComposition =
 module FonctionsRécursives =
 
     /// Cet exemple montre une fonction récursive qui calcule la factorielle d'un
-    /// entier. Elle utilise "let rec" pour définir une fonction récursive.
-    let rec factorielle n =
-        if n = 0 then 1 else n * factorielle (n-1)
+    /// entier. Elle utilise "laisser réc" pour définir une fonction récursive.
+    laisser réc factorielle n =
+        si n = 0 alors 1 autre n * factorielle (n-1)
 
     printfn "La factorielle de 6 est: %d" (factorielle 6)
 
@@ -139,29 +139,29 @@ module FonctionsRécursives =
     /// Puisque toutes les appels récursifs sont des appels de queue,
     /// le compilateur transformera la fonction en boucle,
     /// ce qui améliore les performances et réduit la consommation de mémoire.
-    let rec grandCommunDiviseur a b =
-        if a = 0 then b
-        elif a < b then grandCommunDiviseur a (b - a)
-        else grandCommunDiviseur (a - b) b
+    laisser réc grandCommunDiviseur a b =
+        si a = 0 alors b
+        autsi a < b alors grandCommunDiviseur a (b - a)
+        autre grandCommunDiviseur (a - b) b
 
     printfn "Le plus grand commun diviseur de 300 et 620 est %d" (grandCommunDiviseur 300 620)
 
     /// Cet exemple calcule la somme d'une liste d'entiers en utilisant la récursion.
-    let rec sommeDeLaList xs =
-        match xs with
+    laisser réc sommeDeLaList xs =
+        correspondre xs avec
         | []    -> 0
         | y::ys -> y + sommeDeLaList ys
 
     /// Cela rend "sommeDeLaList" récursif de manière de queue, en utilisant une fonction auxiliaire avec un accumulateur de résultat.
-    let rec private sommeDeLaListRécAux accumulator xs =
-        match xs with
+    laisser réc privée sommeDeLaListRécAux accumulator xs =
+        correspondre xs avec
         | []    -> accumulator
         | y::ys -> sommeDeLaListRécAux (accumulator+y) ys
 
     /// Cela invoque la fonction auxiliaire récursive de queue, en fournissant "0" comme accumulateur initial.
     /// Une approche comme celle-ci est courante en F#.
-    let sommeDeLaListRéc xs = sommeDeLaListRécAux 0 xs
+    laisser sommeDeLaListRéc xs = sommeDeLaListRécAux 0 xs
 
-    let deUnÀDix = [1; 2; 3; 4; 5; 6; 7; 8; 9; 10]
+    laisser deUnÀDix = [1; 2; 3; 4; 5; 6; 7; 8; 9; 10]
 
     printfn "Somme de 1 à 10 est %d" (sommeDeLaListRéc deUnÀDix)
