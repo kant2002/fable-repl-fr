@@ -79,7 +79,7 @@ module PipelinesEtComposition =
     /// élève au carré les impairs résultants et ajoute 1 aux impairs carrés.
     laisser éleverAuCarréLesValeursImpairesEtAjouterUn valeurs =
         laisser impairs = List.filter estImpair valeurs
-        laisser carrés = List.map carré odds
+        laisser carrés = List.map carré impairs
         laisser résultat = List.map ajouteUn carrés
         résultat
 

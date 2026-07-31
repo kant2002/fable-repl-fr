@@ -125,7 +125,7 @@ module Séquences =
     /// Cet exemple utilise rendement! pour renvoyer chaque élément d'une sous-séquence.
     laisser réc marcheAléatoire x =
         seq { rendement x
-              rendement! marcheAléatoire (x + rnd.NextDouble() - 0.5) }
+              yield! marcheAléatoire (x + rnd.NextDouble() - 0.5) }
 
     /// Cet exemple montre les 100 premiers éléments de la marche aléatoire.
     laisser les100PremièresValeursDeLaMarcheAléatoire =
